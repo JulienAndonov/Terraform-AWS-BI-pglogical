@@ -1,9 +1,1 @@
-environment = "plgrnd-j-a"
-region      = "eu-central-1"
-database_admin_password = "Password123!"
-database_admin_username = "thedock"
-public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDK1fkb0aEeB3+UfALnb5mLsj9WEpMoxDR5xg717KbK3XpzYye9Z8CqTT1Btp6kVoJ5l+YE9l7v7ExoiEcp2uVYHn15WDVBYycUrw6yIg46hGbyUcveZ+AVHWdY+Zln3aUc/Bn6IFYG5UoMOGAnYJZhYntrhEjLVuc5pi5a9a8tir24fZt+ng8n3MxTUn8NPt9b34LukeNWOIgqsLQlButLFODWKrXbx4o6iQU7/9tWl3oVrU+bVb5L5KMlbP++rb4Vy0MKOGLKooLFwq9u9WeYH29Gq/8bICoRBvpPXzjKPCtuFB0c6TrPLOZLwMpfOkJieFww2fhs+f+i5q+wmtP1JCfAfKeH3bdewlxszN2m95OzA8VZlryfkedFTKcyxfqdAngz1Hf6mxIU32rsRmXVGqQssH81TBO7DUHMnyNTuZ0uKPSyH3+4EtWzZ2dp/1OuAOBdKdGsvBYZkbj73C5ohhZaVy9p3yDUCSFM8V8Mqg9zcwfcTC4S/xLLY+haHFk= andonoovj@JumpySkyBison"
-private_key_path = "~\\.ssh\\id_rsa_oci"
-destination_sql_path = ".\\destination.sql"
-database_name = "partner-ehotel"
-source_endpoint = "banking-int.cluster-cb5ytt5zm3va.eu-central-1.rds.amazonaws.com"
+
