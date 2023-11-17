@@ -1,0 +1,70 @@
+/* Clean up & Setup */
+drop database "${database_name}" with (FORCE);
+create database "${database_name}";
+\c ${database_name}
+create extension pglogical;
+select pglogical.drop_node('subscriber', true);
+
+
+/* Create node */
+select pglogical.create_node(node_name := 'subscriber', dsn := 'host=${destination_endpoint} port=5432 user=${database_admin_username} dbname=${database_name} password=${database_admin_password}');
+
+/* BI Configuration */
+ALTER TYPE uuid OWNER TO thedock;
+ALTER TYPE int8 OWNER TO thedock;
+ALTER TYPE timestamp OWNER TO thedock;
+ALTER TYPE timestamptz OWNER TO thedock;
+create role "partner-ehotel_write";
+create role "partner-ehotel_read";
+create role "partner-ehotel_app";
+select pglogical.create_subscription(subscription_name := 'ddl_sql', provider_dsn := 'host=${source_endpoint} port=5432 user=${database_admin_username} dbname=${database_name} password=${database_admin_password}', replication_sets := array['ddl_sql'], synchronize_structure := true, synchronize_data := false);
+
+alter table a2a_transfers.a2a_transfer_instruments alter column idempotency_key drop not null;
+alter table a2a_transfers.a2a_transfer_instruments alter column trace_id drop not null;
+alter table a2a_transfers.a2a_transfer_payments alter column idempotency_key drop not null;
+alter table a2a_transfers.a2a_transfer_payments alter column trace_id drop not null;
+select pglogical.create_subscription(subscription_name := 'a2a_transfers', provider_dsn := 'host=${source_endpoint} port=5432 user=${database_admin_username} dbname=${database_name} password=${database_admin_password}', replication_sets := array['a2a_transfers'], synchronize_structure := false, synchronize_data := true);
+
+alter table account_service.account_holders alter column idempotency_key drop not null;
+alter table account_service.account_holders alter column trace_id drop not null;
+alter table account_service.accounts alter column idempotency_key drop not null;
+alter table account_service.accounts alter column trace_id drop not null;
+alter table account_service.transactions alter column idempotency_key drop not null;
+alter table account_service.transactions alter column trace_id drop not null;
+alter table account_service.accounts_status_history alter column idempotency_key drop not null;
+alter table account_service.accounts_status_history alter column trace_id drop not null; 
+alter table account_service.technical_accounts_debit_hold_balance_history alter column idempotency_key drop not null; 
+alter table account_service.technical_accounts_debit_hold_balance_history alter column trace_id drop not null; 
+
+select pglogical.create_subscription(subscription_name := 'account_service', provider_dsn := 'host=${source_endpoint} port=5432 user=${database_admin_username} dbname=${database_name} password=${database_admin_password}', replication_sets := array['account_service'], synchronize_structure := false, synchronize_data := true);
+
+alter table bank_transfer_service.bank_transfer_holders alter column idempotency_key drop not null;
+alter table bank_transfer_service.bank_transfer_holders alter column trace_id drop not null;
+alter table bank_transfer_service.bank_transfer_instrument alter column idempotency_key drop not null;
+alter table bank_transfer_service.bank_transfer_instrument alter column trace_id drop not null;
+alter table bank_transfer_service.transactions alter column idempotency_key drop not null;
+alter table bank_transfer_service.transactions alter column trace_id drop not null;
+alter table bank_transfer_service.bank_transfer_holders_label_history alter column idempotency_key drop not null;
+alter table bank_transfer_service.bank_transfer_holders_label_history alter column label drop not null;
+alter table bank_transfer_service.bank_transfer_holders_label_history alter column trace_id drop not null;
+select pglogical.create_subscription(subscription_name := 'bank_transfer_service', provider_dsn := 'host=${source_endpoint} port=5432 user=${database_admin_username} dbname=${database_name} password=${database_admin_password}', replication_sets := array['bank_transfer_service'], synchronize_structure := false, synchronize_data := true);
+
+alter table card_service.authorizations alter column idempotency_key drop not null;
+alter table card_service.authorizations alter column trace_id drop not null;
+alter table card_service.cards alter column trace_id drop not null;
+alter table card_service.cards_marqeta alter column card_json drop not null;
+alter table card_service.cards_marqeta alter column trace_id drop not null;
+alter table card_service.cards_status_low_history alter column idempotency_key drop not null;
+alter table card_service.cards_status_low_history alter column trace_id drop not null;
+alter table card_service.clearings alter column idempotency_key drop not null;
+alter table card_service.clearings alter column trace_id drop not null;
+alter table card_service.velocity_controls alter column idempotency_key drop not null;
+alter table card_service.velocity_controls alter column trace_id drop not null;
+alter table card_service.cards_marqeta_status_history alter column trace_id drop not null;
+alter table card_service.velocity_controls_window_history alter column idempotency_key drop not null;
+alter table card_service.velocity_controls_window_history alter column trace_id drop not null;
+select pglogical.create_subscription(subscription_name := 'card_service', provider_dsn := 'host=${source_endpoint} port=5432 user=${database_admin_username} dbname=${database_name} password=${database_admin_password}', replication_sets := array['card_service'], synchronize_structure := false, synchronize_data := true);
+
+alter table tenant_service.tenants alter column idempotency_key drop not null;
+alter table tenant_service.tenants alter column trace_id drop not null;
+select pglogical.create_subscription(subscription_name := 'tenant_service', provider_dsn := 'host=${source_endpoint} port=5432 user=${database_admin_username} dbname=${database_name} password=${database_admin_password}', replication_sets := array['tenant_service'], synchronize_structure := false, synchronize_data := true);
